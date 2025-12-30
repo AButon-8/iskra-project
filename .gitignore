@@ -1,0 +1,15 @@
+# --- macOS ---
+.DS_Store
+
+# --- RStudio ---
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- Python ---
+__pycache__/
+*.pyc
