@@ -1,0 +1,8 @@
+filename,predicted_author_nb,nb_margin,nb_confidence,predicted_author_lr,lr_margin,lr_confidence
+dubia_poslednee_slovo_bund_I.txt,lenin,0.8695875153770226,high,lenin,0.7794576792013349,high
+dubia_priznaki_bankrotstva_I.txt,trotsky,0.013119836663608109,low,trotsky,0.07947992094016326,high
+dubia_novoe_poboishe_I.txt,lenin,0.4428909305759583,high,lenin,0.6370558296344662,high
+dubia_ot_red_iskry_I.txt,lenin,0.7970132272140011,high,lenin,0.8093914132488076,high
+dubia_slovo_mosc_vedomostyam_I.txt,lenin,0.17889366058962142,high,lenin,0.13143597261543943,high
+dubia_nasushnie_zadachi_I.txt,lenin,0.820561231636558,high,lenin,0.7085051829769246,high
+dubia_zakon_o_voznagr_I.txt,lenin,0.6006101405037803,high,lenin,0.7043706113158952,high

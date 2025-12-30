@@ -1,0 +1,8 @@
+filename,predicted_author_300,predicted_author_500,predicted_author_1000,stable_cosine,cosine_margin_1000,predicted_author_tanimoto_300,predicted_author_tanimoto_500,predicted_author_tanimoto_1000,stable_tanimoto,tanimoto_margin_1000
+dubia_poslednee_slovo_bund_I.txt,lenin,plehanov,lenin,False,0.031600660259477165,lenin,lenin,lenin,True,0.06503310669306839
+dubia_priznaki_bankrotstva_I.txt,martov,lenin,lenin,False,0.029355745765918595,martov,lenin,parvus,False,0.0005948966278315759
+dubia_novoe_poboishe_I.txt,trotsky,trotsky,lenin,False,0.012380261439867146,lenin,lenin,lenin,True,0.010207401204129551
+dubia_ot_red_iskry_I.txt,lenin,lenin,lenin,True,0.04236607828149541,lenin,martov,martov,False,0.00034119404350507754
+dubia_slovo_mosc_vedomostyam_I.txt,lenin,lenin,lenin,True,0.006055305595371818,lenin,lenin,lenin,True,0.004164695989985812
+dubia_nasushnie_zadachi_I.txt,martov,martov,lenin,False,0.006723411080233221,martov,martov,lenin,False,0.009259028717856221
+dubia_zakon_o_voznagr_I.txt,trotsky,trotsky,trotsky,True,0.011401247448046714,lenin,lenin,lenin,True,0.026625712587944272
