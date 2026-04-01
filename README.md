@@ -8,7 +8,16 @@
 
 ## Структура репозитория
 
-ML-mini-project # подробнее в README мини-проекта
+CORPUS      # сырые данные .txt
+- dubia/
+- krupskaya/
+- lenin/
+- martov/
+- etc.../
+DATA        # структурированные данные (таблицы)
+FEATURES    # признаки (матрицы)
+
+ML-mini-project # подробнее в README.md мини-проекта
 - data/
 - notebooks/
 - results/
