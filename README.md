@@ -8,13 +8,17 @@
 
 ## Структура репозитория
 
-CORPUS      # сырые данные .txt
+CORPUS      # исходные тексты в формате .txt
 - dubia/
 - krupskaya/
 - lenin/
 - martov/
 - etc.../
-DATA        # структурированные данные (таблицы)
+
+
+DATA        # табличные данные
+
+
 FEATURES    # признаки (матрицы)
 
 ML-mini-project # подробнее в README.md мини-проекта
