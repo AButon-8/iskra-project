@@ -20,6 +20,10 @@ DATA        # табличные данные
 
 
 FEATURES    # признаки (матрицы)
+- mfw_100/300/500/1000_norm 
+# mfw с нормализацией (частота на 1000 слов)
+- char_3/4gram_norm 
+# char n-gram: min_occurrence = 5, max_features = 500, нормализация на 1000 знаков 
 
 ML-mini-project # подробнее в README.md мини-проекта
 - data/
