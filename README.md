@@ -23,7 +23,8 @@ DATA        # табличные данные
 FEATURES    # признаки (матрицы)
 - char_3/4gram_norm # char n-gram: min_occurrence = 5, max_features = 500, нормализация на 1000 знаков
 - mfw_100/300/500/1000_norm # mfw с нормализацией (частота на 1000 слов)
-- pos_features_nodubia # матрица POS-признаков для текстов известных авторов
+- pos_features_nodubia # матрица POS-признаков для текстов известных авторов (145, 18)
+- pos_features_full_nodubia # матрица базовые POS+2-/3-граммы POS (145, 3589)
 - tfidf_150/500 # TF-IDF матрицы с 150 и 500 параметрами
 
 ML-mini-project # подробнее в README.md мини-проекта
