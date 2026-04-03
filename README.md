@@ -21,9 +21,9 @@ DATA        # табличные данные
 
 
 FEATURES    # признаки (матрицы)
+- char_3/4gram_norm # char n-gram: min_occurrence = 5, max_features = 500, нормализация на 1000 знаков
 - mfw_100/300/500/1000_norm # mfw с нормализацией (частота на 1000 слов)
-- char_3/4gram_norm # char n-gram: min_occurrence = 5, max_features = 500, нормализация на 1000 знаков 
-- tfidf_150 # TF-IDF матрица с 150 параметрами
+- tfidf_150/500 # TF-IDF матрицы с 150 и 500 параметрами
 
 ML-mini-project # подробнее в README.md мини-проекта
 - data/
