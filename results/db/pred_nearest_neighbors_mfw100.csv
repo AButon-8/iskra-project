@@ -1,0 +1,10 @@
+dubia,predicted_author,votes,mean_similarity
+dubia_finans_manifest.txt,trotsky,3,0.9247140554252005
+dubia_nasushnie_zadachi_I.txt,lenin,2,0.9444763906503442
+dubia_novoe_poboishe_I.txt,lenin,3,0.9417227756276442
+dubia_ot_red_iskry_I.txt,lenin,4,0.9313860147686299
+dubia_ot_red_na_pismo_parvusa_I.txt,lenin,3,0.7184715275558453
+dubia_poslednee_slovo_bund_I.txt,lenin,4,0.920898867840911
+dubia_priznaki_bankrotstva_I.txt,martov,3,0.9559556125963969
+dubia_slovo_mosc_vedomostyam_I.txt,zasulich,3,0.9428487670482344
+dubia_zakon_o_voznagr_I.txt,lenin,4,0.9524577003156052
