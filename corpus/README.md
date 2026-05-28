@@ -13,7 +13,7 @@ Year: 2026
 
 ## Author
 
-**Anastasia Bogdanova**
+**Anastasya Bogdanova**
 MA Program “Digital Methods in the Humanities”
 National Research University Higher School of Economics (HSE University)
 
