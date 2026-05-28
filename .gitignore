@@ -14,6 +14,22 @@
 __pycache__/
 *.pyc
 
-# --- 
+# --- Quarto / knitr ---
+
+.quarto/
+*_files/
+
+# --- Outputs ---
 *.html
+*.log
+
+# --- Temporary files ---
+
+*.tmp
+*.bak
+*~
+
+# --- VS Code ---
+
+.vscode/
 
