@@ -8,12 +8,15 @@ library(caret)
 library(yardstick)
 
 
-# CF_LR_MFW500_59,	CF_LR_MFW500_60,	CF_SVM_MFW500_61,	CF_RF_MFW500_62
-url_ch <- "https://raw.githubusercontent.com/AButon-8/iskra-project/refs/heads/main/features/mfw_C3_500.csv"
 
 
-# Функция для диагностики "коллаборативности" (Улучшенная с chunk_id)
-# Функция с chunk_id
+# ==============================
+
+# Определяем функцию DIAGNOSE_TEXT
+
+# =============================
+
+# Полная версия функции
 diagnose_text <- function(prob_row, 
                           chunk_id_value,      # id текста
                           true_author_value = NULL,  # можно передать, если знаем
@@ -62,32 +65,68 @@ diagnose_text <- function(prob_row,
 }
 
 
-# Применяем ко всем тестовым текстам
-
-# Создаем диагностическую таблицу для всего теста
-test_diagnostics <- list()
-
-for (i in 1:nrow(prob_matrix)) {
-  test_diagnostics[[i]] <- diagnose_text(
-    prob_row = prob_matrix[i, ],
-    chunk_id_value = mfw_ch$chunk_id[-train_idx][i],
-    true_author_value = y_test[i],
-    threshold = 0.4
+# Применяем диагностику
+dubia_results <- list()
+for (i in 1:nrow(dubia_matrix)) {
+  dubia_results[[i]] <- diagnose_text(
+    prob_row = dubia_prob[i, ],
+    chunk_id_value = dubia_matrix$chunk_id[i],
+    true_author_value = "dubia",  # указываем, что это неизвестный текст
+    threshold = 0.5
   )
 }
 
-# Превращаем в data.frame для удобства
-diag_df <- do.call(rbind, lapply(test_diagnostics, function(x) {
-  data.frame(
-    chunk_id = x$chunk_id,
-    status = x$status,
-    top1_author = x$top1_author,
-    top1_prob = x$top1_prob,
-    top2_author = x$top2_author,
-    top2_prob = x$top2_prob,
-    ratio = x$ratio,
-    correct = x$correct,
-    true_author = x$true_author,
-    stringsAsFactors = FALSE
+
+# Создаем удобную таблицу результатов
+dubia_table <- data.frame(
+  chunk_id = character(),
+  true_author = character(),
+  predicted = character(),
+  plehanov = numeric(),
+  parvus = numeric(),
+  ortodox = numeric(),
+  zasulich = numeric(),
+  martov = numeric(),
+  krupskaya = numeric(),
+  lenin = numeric(),
+  trotsky = numeric(),
+  status = character(),
+  top1_prob = numeric(),
+  top2_author = character(),
+  top2_prob = numeric(),
+  ratio = numeric()
+)
+
+
+for (i in 1:length(dubia_results)) {
+  res <- dubia_results[[i]]
+  
+  # Извлекаем вероятности для всех авторов
+  probs <- res$all_probs
+  names(probs) <- gsub("\\.", " ", names(probs))  # восстанавливаем имена
+  
+  # Создаем строку таблицы
+  row_data <- data.frame(
+    chunk_id = res$chunk_id,
+    true_author = "dubia",
+    predicted = res$top1_author,
+    plehanov = ifelse("plehanov" %in% names(probs), probs["plehanov"], NA),
+    parvus = ifelse("parvus" %in% names(probs), probs["parvus"], NA),
+    ortodox = ifelse("ortodox" %in% names(probs), probs["ortodox"], NA),
+    zasulich = ifelse("zasulich" %in% names(probs), probs["zasulich"], NA),
+    martov = ifelse("martov" %in% names(probs), probs["martov"], NA),
+    krupskaya = ifelse("krupskaya" %in% names(probs), probs["krupskaya"], NA),
+    lenin = ifelse("lenin" %in% names(probs), probs["lenin"], NA),
+    trotsky = ifelse("trotsky" %in% names(probs), probs["trotsky"], NA),
+    status = res$status,
+    top1_prob = res$top1_prob,
+    top2_author = res$top2_author,
+    top2_prob = res$top2_prob,
+    ratio = res$ratio
   )
-}))
+  
+  dubia_table <- rbind(dubia_table, row_data)
+}
+
+# Просматриваем результат
+print(dubia_table)

@@ -160,9 +160,9 @@ cat("Чисел в MFW300:", sum(grepl("^[0-9]+$|^X[0-9]+$", mfw_300_global)), "
 cat("Чисел в MFW500:", sum(grepl("^[0-9]+$|^X[0-9]+$", mfw_500_global)), "\n")
 
 
-# Пути
-features_dir <- "/Users/anastasiabogdanova/R_directory/iskra-project/features/"
-data_dir <- "/Users/anastasiabogdanova/R_directory/iskra-project/data/processed/"
+# Пути (вставить)
+features_dir <- "/iskra-project/features/"
+data_dir <- "/iskra-project/data/processed/"
 
 
 
@@ -183,8 +183,8 @@ saveRDS(master_C, paste0(data_dir, "master_C_corpus.rds"))
 # Загружаем фиксированный словарь (подсчитан на мастер-корпусе C)
 
 # Путь
-features_dir <- "/Users/anastasiabogdanova/R_directory/iskra-project/features/"
-data_dir <- "/Users/anastasiabogdanova/R_directory/iskra-project/data/processed/"
+features_dir <- "/iskra-project/features/"
+data_dir <- "/iskra-project/data/processed/"
 
 # Загружаем словари (уже подсчитаны на мастер-корпусе C)
 mfw_300 <- read_lines(paste0(features_dir, "mfw_300_C_master.txt"))
@@ -198,11 +198,11 @@ length(mfw_500)  # должно быть 500
 head(mfw_300, 20)
 
 
-# =========
+# ===============
+
 # Матрица для C1 (MFW300)
 
-
-# =======
+# ==============
 
 # Загружаем корпус C1
 corpus_C1 <- read_csv(paste0(data_dir, "corpus_C1.csv"))
@@ -456,8 +456,8 @@ library(tidyverse)
 library(tidytext)
 
 # Пути
-data_dir <- "/Users/anastasiabogdanova/R_directory/iskra-project/data/processed/"
-features_dir <- "/Users/anastasiabogdanova/R_directory/iskra-project/features/"
+data_dir <- "/iskra-project/data/processed/"
+features_dir <- "/iskra-project/features/"
 
 # Загружаем фиксированные словари (из мастер-корпуса C)
 mfw_300 <- read_lines(paste0(features_dir, "mfw_300_C_master.txt"))
@@ -468,8 +468,8 @@ cat("MFW300:", length(mfw_300), "слов\n")
 cat("MFW500:", length(mfw_500), "слов\n")
 head(mfw_300, 10)
 
-# Загружаем dubia (уточните название файла!)
-dubia <- read_csv("/Users/anastasiabogdanova/R_directory/iskra-project/data/processed/corpus_dubia.csv")
+# Загружаем dubia 
+dubia <- read_csv("/iskra-project/data/processed/corpus_dubia.csv")
 
 # Проверяем структуру dubia
 glimpse(dubia)
@@ -638,7 +638,7 @@ library(yardstick)
 # ===============================================
 
 
-mfw_clean <- read_csv("/Users/anastasiabogdanova/R_directory/iskra-project/features/mfw_C.C1_300.csv")
+mfw_clean <- read_csv("./iskra-project/features/final/mfw_C.C1_300.csv")
 
 # Подготовка
 X <- mfw_clean |> select(-chunk_id, -author)
@@ -759,7 +759,7 @@ cat(capture.output(write.table(cm, sep = "\t", col.names = NA)), sep = "\n")
 # 7. СОХРАНЕНИЕ МОДЕЛИ
 # ============================================
 
-saveRDS(svm_model, "/Users/anastasiabogdanova/R_directory/iskra-project/models/svm_model_C.C1_300_F1_0.888.rds")
+saveRDS(svm_model, "/iskra-project/models/svm_model_C.C1_300_F1_0.888.rds")
 #saveRDS(list(scale_center = scale_center, scale_scale = scale_scale), "/Users/anastasiabogdanova/R_directory/iskra-project/models/scaling_params_C1_300.rds")
 
 cat("\nМодель и параметры scaling сохранены\n")
@@ -771,7 +771,7 @@ cat("\nМодель и параметры scaling сохранены\n")
 
 
 # Загружаем dubia матрицу
-dubia_matrix <- read_csv("/Users/anastasiabogdanova/R_directory/iskra-project/features/dubia_C_mfw_300.csv")
+dubia_matrix <- read_csv("/iskra-project/features/final/dubia_C_mfw_300.csv")
 
 
 # Подготовка dubia (только признаки, без chunk_id и author)
@@ -782,57 +782,6 @@ dubia_X_scaled <- scale(dubia_X,
                         center = scale_center,
                         scale = scale_scale)
 
-
-
-#-----ЧИНИМ МАТРИЦЫ!!! --- start
-
-# Проверяем наличие X1 в train_data2
-cat("X1 в train_data2:", "X1" %in% colnames(train_data2), "\n")
-
-# Проверяем наличие X1 в dubia_X_scaled
-cat("X1 в dubia_X_scaled:", "X1" %in% colnames(dubia_X_scaled), "\n")
-
-# Проверяем, совпадают ли колонки
-cat("Колонки совпадают:", identical(colnames(train_data2[, -ncol(train_data2)]), 
-                                    colnames(dubia_X_scaled)), "\n")
-
-# Если не совпадают — показываем
-if (!identical(colnames(train_data2[, -ncol(train_data2)]), colnames(dubia_X_scaled))) {
-  cat("\nКолонки в train, которых нет в dubia:\n")
-  print(setdiff(colnames(train_data2[, -ncol(train_data2)]), colnames(dubia_X_scaled)))
-  
-  cat("\nКолонки в dubia, которых нет в train:\n")
-  print(setdiff(colnames(dubia_X_scaled), colnames(train_data2[, -ncol(train_data2)])))
-}
-
-
-# Загружаем текущие словари
-mfw_300 <- read_lines("/Users/anastasiabogdanova/R_directory/iskra-project/features/mfw_300_C_master.txt")
-mfw_500 <- read_lines("/Users/anastasiabogdanova/R_directory/iskra-project/features/mfw_500_C_master.txt")
-
-
-# Функция для удаления цифровых слов (чистые числа и числа с X)
-remove_numeric_words <- function(words) {
-  # Удаляем: чистые цифры, слова начинающиеся с X и затем цифры, слова с цифрами
-  cleaned <- words[!grepl("^[0-9]+$", words)]  # "1", "1905"
-  cleaned <- cleaned[!grepl("^X[0-9]+$", cleaned)]  # "X1", "X1905"
-  cleaned <- cleaned[!grepl("[0-9]", cleaned)]  # любые слова с цифрами
-  return(cleaned)
-}
-
-
-# Очищаем
-mfw_300_clean <- remove_numeric_words(mfw_300)
-mfw_500_clean <- remove_numeric_words(mfw_500)
-
-
-# Сколько удалили?
-cat("MFW300: было", length(mfw_300), "стало", length(mfw_300_clean), "\n")
-cat("MFW500: было", length(mfw_500), "стало", length(mfw_500_clean), "\n")
-
-
-
-#---- ЧИНИМ МАТРИЦЫ finish
 
 
 
@@ -968,8 +917,8 @@ cat(capture.output(write.table(dubia_table, sep = "\t", row.names = FALSE)), sep
 
 
 # Сохраняем в CSV
-write_csv(dubia_table, "/Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_predictions_SVM_71.csv")
-cat("\nРезультаты сохранены в: /Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_predictions_SVM_71.csv\n")
+write_csv(dubia_table, "/iskra-project/results/dubia_predictions_SVM_71.csv")
+cat("\nРезультаты сохранены в: /iskra-project/results/dubia_predictions_SVM_71.csv\n")
 
 
 
@@ -998,8 +947,8 @@ cat(capture.output(write.table(cm, sep = "\t", row.names = FALSE)), sep = "\n")
 
 
 # 1. ЗАГРУЗКА ДАННЫХ
-mfw_clean <- read_csv("/Users/anastasiabogdanova/R_directory/iskra-project/features/mfw_C.C2_300.csv")
-dubia_matrix <- read_csv("/Users/anastasiabogdanova/R_directory/iskra-project/features/dubia_C_mfw_300.csv")
+mfw_clean <- read_csv("/iskra-project/features/mfw_C.C2_300.csv")
+dubia_matrix <- read_csv("/iskra-project/features/dubia_C_mfw_300.csv")
 
 # 2. ПОДГОТОВКА
 X <- mfw_clean |> select(-chunk_id, -author)
@@ -1026,6 +975,7 @@ scale_scale <- attr(train_X_scaled, "scaled:scale")
 test_X_scaled <- scale(test_X, center = scale_center, scale = scale_scale)
 train_data2 <- data.frame(train_X_scaled, author = train_data$author)
 test_data2 <- data.frame(test_X_scaled, author = test_data$author)
+
 
 # 5. SVM МОДЕЛЬ == ЛИНЕЙНОЕ ЯДРО
 set.seed(818)
@@ -1087,6 +1037,7 @@ dubia_X_scaled <- scale(dubia_X, center = scale_center, scale = scale_scale)
 
 # 8. ПРЕДСКАЗАНИЕ DUBIA
 dubia_prob <- attr(predict(svm_model, dubia_X_scaled, probability = TRUE), "probabilities")
+
 
 # ==============================
 
@@ -1214,8 +1165,8 @@ cat(capture.output(write.table(dubia_table, sep = "\t", row.names = FALSE)), sep
 
 
 # Сохраняем в CSV
-write_csv(dubia_table, "/Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_predictions_SVM_72.csv")
-cat("\nРезультаты сохранены в: /Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_predictions_SVM_72.csv\n")
+write_csv(dubia_table, "/iskra-project/results/dubia_predictions_SVM_72.csv")
+cat("\nРезультаты сохранены в: /iskra-project/results/dubia_predictions_SVM_72.csv\n")
 
 
 
@@ -1240,14 +1191,14 @@ cat(capture.output(write.table(cm, sep = "\t", row.names = FALSE)), sep = "\n")
 
 # ============================================
 
-# C.C3_MFW300: CF_SVM_MFW300_73, CF_SVM_MFW300_73_85
+# C.C3_MFW300: CF_SVM_MFW300_73, CF_SVM_MFW300_73_85 - номера экспериментов
 
 # ============================================
 
 
 # 1. ЗАГРУЗКА ДАННЫХ
-mfw_clean <- read_csv("/Users/anastasiabogdanova/R_directory/iskra-project/features/mfw_C.C3_300.csv")
-dubia_matrix <- read_csv("/Users/anastasiabogdanova/R_directory/iskra-project/features/dubia_C_mfw_300.csv")
+mfw_clean <- read_csv("/iskra-project/features/mfw_C.C3_300.csv")
+dubia_matrix <- read_csv("/iskra-project/features/dubia_C_mfw_300.csv")
 
 # 2. ПОДГОТОВКА
 X <- mfw_clean |> select(-chunk_id, -author)
@@ -1463,8 +1414,8 @@ cat(capture.output(write.table(dubia_table, sep = "\t", row.names = FALSE)), sep
 
 
 # Сохраняем в CSV
-write_csv(dubia_table, "/Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_predictions_SVM_73.csv")
-cat("\nРезультаты сохранены в: /Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_predictions_SVM_73.csv\n")
+write_csv(dubia_table, "/iskra-project/results/dubia_predictions_SVM_73.csv")
+cat("\nРезультаты сохранены в: /iskra-project/results/dubia_predictions_SVM_73.csv\n")
 
 
 
@@ -1494,8 +1445,8 @@ cat(capture.output(write.table(cm, sep = "\t", row.names = FALSE)), sep = "\n")
 
 
 # 1. ЗАГРУЗКА ДАННЫХ
-mfw_clean <- read_csv("/Users/anastasiabogdanova/R_directory/iskra-project/features/mfw_C.C1_500.csv")
-dubia_matrix <- read_csv("/Users/anastasiabogdanova/R_directory/iskra-project/features/dubia_C_mfw_500.csv")
+mfw_clean <- read_csv("/iskra-project/features/mfw_C.C1_500.csv")
+dubia_matrix <- read_csv("/iskra-project/features/dubia_C_mfw_500.csv")
 
 # 2. ПОДГОТОВКА
 X <- mfw_clean |> select(-chunk_id, -author)
@@ -1710,8 +1661,8 @@ cat(capture.output(write.table(dubia_table, sep = "\t", row.names = FALSE)), sep
 
 
 # Сохраняем в CSV
-write_csv(dubia_table, "/Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_predictions_SVM_74.csv")
-cat("\nРезультаты сохранены в: /Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_predictions_SVM_74.csv\n")
+write_csv(dubia_table, "/iskra-project/results/dubia_predictions_SVM_74.csv")
+cat("\nРезультаты сохранены в: /iskra-project/results/dubia_predictions_SVM_74.csv\n")
 
 
 
@@ -1736,14 +1687,14 @@ cat(capture.output(write.table(cm, sep = "\t", row.names = FALSE)), sep = "\n")
 
 # ============================================
 
-# C.C2_MFW500: CF_SVM_MFW500_75, CF_SVM_MFW500_75_87
+# C.C2_MFW500: CF_SVM_MFW500_75, CF_SVM_MFW500_75_87 - номера экспериментов
 
 # ============================================
 
 
 # 1. ЗАГРУЗКА ДАННЫХ
-mfw_clean <- read_csv("/Users/anastasiabogdanova/R_directory/iskra-project/features/mfw_C.C2_500.csv")
-dubia_matrix <- read_csv("/Users/anastasiabogdanova/R_directory/iskra-project/features/dubia_C_mfw_500.csv")
+mfw_clean <- read_csv("/iskra-project/features/mfw_C.C2_500.csv")
+dubia_matrix <- read_csv("/iskra-project/features/dubia_C_mfw_500.csv")
 
 # 2. ПОДГОТОВКА
 X <- mfw_clean |> select(-chunk_id, -author)
@@ -1958,8 +1909,8 @@ cat(capture.output(write.table(dubia_table, sep = "\t", row.names = FALSE)), sep
 
 
 # Сохраняем в CSV
-write_csv(dubia_table, "/Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_predictions_SVM_75.csv")
-cat("\nРезультаты сохранены в: /Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_predictions_SVM_75.csv\n")
+write_csv(dubia_table, "/iskra-project/results/dubia_predictions_SVM_75.csv")
+cat("\nРезультаты сохранены в: /iskra-project/results/dubia_predictions_SVM_75.csv\n")
 
 
 
@@ -1982,14 +1933,14 @@ cat(capture.output(write.table(cm, sep = "\t", row.names = FALSE)), sep = "\n")
 
 # ============================================
 
-# C.C3_MFW500: CF_SVM_MFW500_76, CF_SVM_MFW500_76_88
+# C.C3_MFW500: CF_SVM_MFW500_76, CF_SVM_MFW500_76_88 - номера экспериментов
 
 # ============================================
 
 
 # 1. ЗАГРУЗКА ДАННЫХ
-mfw_clean <- read_csv("/Users/anastasiabogdanova/R_directory/iskra-project/features/mfw_C.C3_500.csv")
-dubia_matrix <- read_csv("/Users/anastasiabogdanova/R_directory/iskra-project/features/dubia_C_mfw_500.csv")
+mfw_clean <- read_csv("/iskra-project/features/final/mfw_C.C3_500.csv")
+dubia_matrix <- read_csv("/iskra-project/features/final/dubia_C_mfw_500.csv")
 
 # 2. ПОДГОТОВКА
 X <- mfw_clean |> select(-chunk_id, -author)
@@ -2205,8 +2156,8 @@ cat(capture.output(write.table(dubia_table, sep = "\t", row.names = FALSE)), sep
 
 
 # Сохраняем в CSV
-write_csv(dubia_table, "/Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_predictions_SVM_76.csv")
-cat("\nРезультаты сохранены в: /Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_predictions_SVM_76.csv\n")
+write_csv(dubia_table, "/iskra-project/results/dubia_predictions_SVM_76.csv")
+cat("\nРезультаты сохранены в: /iskra-project/results/dubia_predictions_SVM_76.csv\n")
 
 
 
@@ -2237,7 +2188,7 @@ library(tidyverse)
 
 # 1. ЗАГРУЗКА ВСЕХ ТАБЛИЦ
 
-results_dir <- "/Users/anastasiabogdanova/R_directory/iskra-project/results/"
+results_dir <- "/iskra-project/results/"
 
 C1_300 <- read_csv(paste0(results_dir, "dubia_predictions_SVM_71.csv"))
 C2_300 <- read_csv(paste0(results_dir, "dubia_predictions_SVM_72.csv"))
@@ -2344,7 +2295,7 @@ print(replica_summary)
 
 
 # ============================================
-# 5. ИТОГОВАЯ ТАБЛИЦА (для диссертации)
+# 5. ИТОГОВАЯ ТАБЛИЦА 
 # ============================================
 
 final_table <- chunk_summary |> 
@@ -2382,7 +2333,7 @@ interpretation <- final_table %>%
 print(interpretation)
 
 # Сохраняем
-write_csv(interpretation, "/Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_interpretation.csv")
+write_csv(interpretation, "/iskra-project/results/dubia_interpretation.csv")
 
 
 
@@ -2393,7 +2344,7 @@ write_csv(interpretation, "/Users/anastasiabogdanova/R_directory/iskra-project/r
 # ============================================
 
 
-# Более простой способ без сложных вычислений внутри summarise
+# Более простой способ 
 voting_results <- all_predictions |>
   group_by(chunk_id, predicted) |>
   summarise(
@@ -2420,7 +2371,7 @@ voting_results <- all_predictions |>
 print(voting_results)
 
 # Сохраняем
-write_csv(voting_results, "/Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_voting_results.csv")
+write_csv(voting_results, "/iskra-project/results/dubia_voting_results.csv")
 
 # Краткая сводка
 cat("\n=== СВОДКА ПО ГОЛОСОВАНИЮ ===\n")
@@ -2478,6 +2429,6 @@ print(text_summary)
 
 
 # Сохраняем
-write_csv(text_summary, "/Users/anastasiabogdanova/R_directory/iskra-project/results/dubia_voting_results_text_summary.csv")
+write_csv(text_summary, "/iskra-project/results/dubia_voting_results_text_summary.csv")
 
 
